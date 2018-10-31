@@ -1,28 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Form from "./components/Form";
+import JobList from "./components/JobList";
+import {addJob} from "./actions/index";
+import {connect} from "react-redux";
+import fire from './config/Fire';
 
-class App extends Component {
+const mapDispatchToProps = dispatch => {
+  return {
+    addJob: job => dispatch(addJob(job))
+  };
+};
+
+class ConnectedApp extends Component {
+  componentDidMount() {
+    this.addDatabaseListeners();
+  }
+
+  addDatabaseListeners() {
+    const database = fire.database().ref('jobs');
+
+    // Listener for added job
+    database.on('child_added', snap => {
+      const job = snap.val();
+      this.props.addJob({
+        id: snap.key,
+        title: job.title,
+        description: job.description
+      });
+    });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h1>Add new job</h1>
+        <Form/>
+        <h1>Jobs</h1>
+        <JobList/>
       </div>
     );
   }
 }
 
+const App = connect(null, mapDispatchToProps)(ConnectedApp);
 export default App;

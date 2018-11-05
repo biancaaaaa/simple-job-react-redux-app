@@ -13,13 +13,8 @@ export default class Form extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
-    const database = fire.database().ref('jobs');
     const {title,description} = this.state;
-
-    database.push().set({
-      title, description
-    })
+    fire.database().ref('jobs').push().set({title,description});
   };
 
   render() {

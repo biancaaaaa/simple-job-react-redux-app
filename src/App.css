@@ -4,6 +4,14 @@
     background-color: #b7d3e7;
 }
 
+li {
+    list-style: none;
+    text-align: left;
+    background-color: #ffffff96;
+    padding: 5px 10px;
+    margin: 10px;
+}
+
 .App-logo {
     animation: App-logo-spin infinite 20s linear;
     height: 40vmin;

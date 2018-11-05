@@ -1,11 +1,11 @@
-import { ADD_JOB } from "../constants/action-types";
-import { REQUEST_JOBS } from "../constants/action-types";
-import { RECEIVE_JOBS } from "../constants/action-types";
-
+import {ADD_JOB, REMOVE_JOB, RECEIVE_JOBS, REQUEST_JOBS} from "../constants/action-types";
 import fire from '../config/Fire';
 
 // adds a single job
 export const addJob = job => ({ type: ADD_JOB, payload: job });
+
+// removes single job
+export const removeJob = job => ({ type: REMOVE_JOB, job});
 
 // requests jobs from the database
 export const requestJobs = () => ({ type: REQUEST_JOBS });
@@ -32,8 +32,8 @@ export const fetchJobs = () => {
   };
 };
 
-// adds listener to jobs
-export const jobsListener = () => {
+// child added listener
+export const jobAddedListener = () => {
   return (dispatch, getState) => {
     dispatch(requestJobs());
     return fire.database().ref('jobs').on('child_added', snapshot => {
@@ -47,6 +47,15 @@ export const jobsListener = () => {
         };
         dispatch(addJob(job));
       }
+    });
+  };
+};
+
+// child removed listener
+export const jobRemovedListener = () => {
+  return (dispatch) => {
+    return fire.database().ref('jobs').on('child_removed', snapshot => {
+      dispatch(removeJob(snapshot.key));
     });
   };
 };

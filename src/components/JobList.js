@@ -5,12 +5,13 @@ const mapStateToProps = state => {
   return { jobs: state.jobs };
 };
 
-export const ConnectJobList = ({jobs}) => (
+const ConnectJobList = ({jobs, removeJob}) => (
   <ul>
     {jobs.map(job => (
       <li key={job.id}>
-        <p>{job.title}</p>
+        <h3>{job.title}</h3>
         <p>{job.description}</p>
+        <button onClick={()=> removeJob(job.id)}>Delete</button>
       </li>
     ))}
   </ul>

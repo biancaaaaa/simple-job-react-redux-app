@@ -11,7 +11,8 @@ const rootReducer = (state = initialState, action) => {
     case ADD_JOB:
       return { ...state, jobs: [...state.jobs, action.payload], isFetching: false };
     case REMOVE_JOB:
-      return state; //TODO
+      const jobs = state.jobs.filter(job => job.id !== action.job);
+      return {...state, jobs};
     case REQUEST_JOBS:
       return { ...state, isFetching: true };
     case RECEIVE_JOBS:
